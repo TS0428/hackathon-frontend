@@ -1,48 +1,32 @@
-import { signInWithPopup, GoogleAuthProvider, signOut } from "firebase/auth";
-import { fireAuth } from "./firebase";
+import React from 'react';
+import { signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
+import { fireAuth } from './firebase';
 
-export const LoginForm: React.FC = () => {
-  /**
-   * googleでログインする
-   */
+interface LoginFormProps {
+  onLogin: (user: any) => void;
+}
+
+const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
   const signInWithGoogle = (): void => {
-    // Google認証プロバイダを利用する
     const provider = new GoogleAuthProvider();
 
-    // ログイン用のポップアップを表示
     signInWithPopup(fireAuth, provider)
-      .then(res => {
+      .then((res) => {
         const user = res.user;
-        alert("ログインユーザー: " + user.displayName);
+        alert('ログインユーザー: ' + user.displayName);
+        onLogin(user);
       })
-      .catch(err => {
+      .catch((err) => {
         const errorMessage = err.message;
         alert(errorMessage);
       });
   };
 
-  /**
-   * ログアウトする
-   */
-  const signOutWithGoogle = (): void => {
-    signOut(fireAuth).then(() => {
-      alert("ログアウトしました");
-    }).catch(err => {
-      alert(err);
-    });
-  };
-
   return (
     <div>
-      <button onClick={signInWithGoogle}>
-        Googleでログイン
-      </button>
-      <button onClick={signOutWithGoogle}>
-        ログアウト
-      </button>
+      <button onClick={signInWithGoogle}>Googleでログイン</button>
     </div>
   );
 };
 
 export default LoginForm;
-

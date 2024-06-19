@@ -1,0 +1,26 @@
+.team-selector {
+  text-align: center;
+  padding: 20px;
+}
+
+.teams {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.team {
+  margin: 10px;
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+
+.team img {
+  width: 50px;
+  height: 50px;
+}
+
+.team.selected {
+  transform: scale(1.1);
+}
+

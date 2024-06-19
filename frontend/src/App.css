@@ -1,38 +1,49 @@
+/* 追加するスタイル */
+body {
+    background-image: url('./home_icon.jpeg'); /* 背景画像のパス */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
 .App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+    text-align: center;
 }
 
 .App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+    background-color: rgba(0, 0, 0, 0.5); /* ヘッダーの背景色を少し透明に */
+    padding: 20px;
+    color: white;
 }
 
-.App-link {
-  color: #61dafb;
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 80vh; /* 必要に応じて調整 */
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.8); /* フォームの背景色を少し透明に */
+    padding: 20px;
+    border-radius: 10px;
 }
+
+label {
+    margin: 10px 0;
+}
+
+button {
+    margin: 5px;
+    padding: 10px 20px;
+    font-size: 1em; /* 必要に応じて調整 */
+}
+
+
