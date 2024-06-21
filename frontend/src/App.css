@@ -1,49 +1,73 @@
-/* 追加するスタイル */
+/* App全体のスタイル */
 body {
-    background-image: url('./home_icon.jpeg'); /* 背景画像のパス */
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    margin: 0;
-    padding: 0;
-    font-family: Arial, sans-serif;
+  background-color: black;
+  color: white;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 }
 
-.App {
-    text-align: center;
+.signup-container, .login-container, .complete-profile-container, .start-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: black;
 }
 
-.App-header {
-    background-color: rgba(0, 0, 0, 0.5); /* ヘッダーの背景色を少し透明に */
-    padding: 20px;
-    color: white;
+h1, h2 {
+  font-size: 2.5rem;
+  color: white;
+  margin-bottom: 20px;
 }
 
-main {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 80vh; /* 必要に応じて調整 */
+.input-field {
+  width: 300px;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+  color: black;
 }
 
-form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background: rgba(255, 255, 255, 0.8); /* フォームの背景色を少し透明に */
-    padding: 20px;
-    border-radius: 10px;
+.submit-button {
+  width: 320px;
+  padding: 15px;
+  margin: 20px auto;
+  background-color: #28a745; /* 緑色 */
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  display: block;
 }
 
-label {
-    margin: 10px 0;
+.submit-button:hover {
+  background-color: #218838; /* 濃い緑色 */
 }
 
-button {
-    margin: 5px;
-    padding: 10px 20px;
-    font-size: 1em; /* 必要に応じて調整 */
+.google-button, .styled-button {
+  width: 320px;
+  padding: 15px;
+  margin: 20px 0;
+  background-color: #007BFF;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
 }
 
+.google-button:hover, .styled-button:hover {
+  background-color: #0056b3;
+}
+
+.error-text {
+  color: red;
+  font-size: 0.9rem;
+}
 

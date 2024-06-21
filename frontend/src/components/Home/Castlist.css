@@ -1,0 +1,24 @@
+.cast-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.cast-item {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+}
+
+.cast-user {
+  font-weight: bold;
+}
+
+.cast-content {
+  margin: 10px 0;
+}
+
+.cast-likes {
+  color: #888;
+}

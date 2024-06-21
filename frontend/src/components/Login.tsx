@@ -4,56 +4,58 @@ import { auth, provider } from '../firebase';
 import { signInWithPopup } from 'firebase/auth';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { UserCredential } from 'firebase/auth';
+import '../App.css'; // CSSファイルのインポート
 
 const Login: React.FC = () => {
-  const [email, setEmail] = useState(''); // ログインフォームのメールアドレスの状態と更新関数を定義
-  const [password, setPassword] = useState(''); // ログインフォームのパスワードの状態と更新関数を定義
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
   const handleGoogleSignIn = () => {
     signInWithPopup(auth, provider)
       .then((result) => {
-        // Handle sign-in
         navigate('/home');
       })
       .catch((error) => {
         console.error(error);
       });
   };
+
   const handleEmailLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    // ここにEmailとパスワードでのログイン処理を実装する（未実装のためコメントのみ）
-  signInWithEmailAndPassword(auth, email, password)
-     .then((userCredential: UserCredential) => {
-       navigate('/home');
-     })
-     .catch((error) => {
-       console.error(error);
-     });
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential: UserCredential) => {
+        navigate('/home');
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   return (
-    <div>
+    <div className="login-container">
       <h2>ログイン</h2>
-      <button onClick={handleGoogleSignIn}>Googleでログイン</button>
+      <button onClick={handleGoogleSignIn} className="google-button">Googleでログイン</button>
+      <div className="or-separator">ーまたはー</div>
       <form onSubmit={handleEmailLogin}>
         <input
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          placeholder="Email"
+          placeholder="Emailを入力してください"
+          className="input-field"
         />
         <input
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          placeholder="Password"
+          placeholder="Passwordを入力してください"
+          className="input-field"
         />
-        <button type="submit">ログイン</button>
+        <button type="submit" className="submit-button">ログイン</button>
       </form>
     </div>
   );
-}
+};
 
 export default Login;
-
