@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { auth, provider } from '../firebase'; // Firebaseの設定ファイルをインポート
-import { createUserWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
+import { auth } from '../firebase'; // Firebaseの設定ファイルをインポート
+import { createUserWithEmailAndPassword } from 'firebase/auth';
 import '../App.css'; // CSSファイルのインポート
 
 const Signup: React.FC = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
+  const [user_name, setUsername] = useState<string>('');
   const [emailError, setEmailError] = useState<string>('');
   const [passwordError, setPasswordError] = useState<string>('');
   const navigate = useNavigate();
@@ -23,9 +24,18 @@ const Signup: React.FC = () => {
     }
 
     try {
+      // Firebaseでユーザーを作成
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      const idToken = await userCredential.user.getIdToken();
-      navigate('/complete-profile', { state: { idToken } });
+      const user = userCredential.user;
+
+      // ユーザー情報をサーバーにポスト
+      await axios.post('http://localhost:8080/users', {
+        user_name: user_name,
+        email: email,
+      });
+
+      // 登録完了後の処理
+      navigate('/home');
     } catch (error: any) {
       console.error('Error during registration:', error);
       if (error.code === 'auth/email-already-in-use') {
@@ -36,22 +46,9 @@ const Signup: React.FC = () => {
     }
   };
 
-  const handleGoogleSignup = async () => {
-    try {
-      const result = await signInWithPopup(auth, provider);
-      const idToken = await result.user.getIdToken();
-      navigate('/complete-profile', { state: { idToken } });
-    } catch (error) {
-      console.error('Error during Google sign-up:', error);
-      setEmailError('Googleでの登録中にエラーが発生しました');
-    }
-  };
-
   return (
     <div className="signup-container">
       <h1>新規登録</h1>
-      <button className="styled-button" onClick={handleGoogleSignup}>Googleで新規登録</button>
-      <div className="or-separator">ーまたはー</div>
       <form onSubmit={handleEmailSignup}>
         <input
           type="email"
@@ -69,6 +66,13 @@ const Signup: React.FC = () => {
           className="input-field"
         />
         {passwordError && <p className="error-text">{passwordError}</p>}
+        <input
+          type="text"
+          value={user_name}
+          onChange={(e) => setUsername(e.target.value)}
+          placeholder="Usernameを入力してください"
+          className="input-field"
+        />
         <button type="submit" className="submit-button">新規登録</button>
       </form>
     </div>

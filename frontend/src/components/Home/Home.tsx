@@ -1,103 +1,49 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { auth } from '../../firebase';
-import { signOut } from 'firebase/auth';
-import CastComponent from './Cast';
-import CastList from './Castlist';
-import axios from 'axios';
-import './Home.css'; // 正しいパスを指定
-
-interface Cast {
-  id: number;
-  content: string;
-  mediaUrl?: string;
-  likes: number;
-  replies: Cast[];
-  user: {
-    displayName: string;
-    favoriteTeam: string;
-  };
-}
+import { fetchCasts, Cast, Reply } from './api';  // Reply 型もインポート
+import { useNavigate } from 'react-router-dom'; // React Router のフックをインポート
 
 const Home: React.FC = () => {
   const [casts, setCasts] = useState<Cast[]>([]);
-  const [filteredCasts, setFilteredCasts] = useState<Cast[]>([]);
-  const [filter, setFilter] = useState('all');
-  const [userFavoriteTeam, setUserFavoriteTeam] = useState<string>('Unknown');
-  const [showInput, setShowInput] = useState(false);
-  const navigate = useNavigate();
+  const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate(); // useNavigate フックを使用
 
   useEffect(() => {
-    if (!auth.currentUser) {
-      navigate('/login');
-    } else {
-      fetchFavoriteTeam();
-      fetchCasts();
-    }
-  }, [navigate]);
+    const getCasts = async () => {
+      try {
+        const castData = await fetchCasts();
+        setCasts(castData);
+      } catch (error) {
+        console.error('Failed to fetch casts:', error);
+        setError('Failed to fetch casts');
+      }
+    };
 
-  const fetchFavoriteTeam = async () => {
-    const token = await auth.currentUser?.getIdTokenResult();
-    const team = token?.claims?.favoriteTeam || 'Unknown';
-    setUserFavoriteTeam(typeof team === 'string' ? team : 'Unknown');
-  };
+    getCasts();
+  }, []);
 
-  const fetchCasts = async () => {
-    try {
-      const response = await axios.get('http://localhost:8080/casts', {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-      setCasts(response.data);
-    } catch (error) {
-      console.error('Failed to fetch casts:', error);
-    }
-  };
-
-  useEffect(() => {
-    if (filter === 'favorite') {
-      const filtered = casts.filter(cast => cast.user.favoriteTeam === userFavoriteTeam);
-      setFilteredCasts(filtered);
-    } else {
-      setFilteredCasts(casts);
-    }
-  }, [casts, filter, userFavoriteTeam]);
-
-  const handleSignOut = () => {
-    signOut(auth).then(() => {
-      navigate('/login');
-    }).catch((error) => {
-      console.error('Sign out error:', error);
-    });
-  };
-
-  const handleReply = (id: number) => {
-    console.log(`Reply to cast with id: ${id}`);
-    // 必要に応じて実装
-  };
-
-  const handleLike = (id: number) => {
-    console.log(`Like cast with id: ${id}`);
-    // 必要に応じて実装
+  const handleCastButtonClick = () => {
+    navigate('/cast'); // Cast.tsx へのナビゲーション
   };
 
   return (
-    <div className="container">
-      <div className="sidebar">
-        <button onClick={() => navigate('/profile')}>プロフィールの変更</button>
-        <button onClick={() => console.log('Search feature not implemented yet')}>Search</button>
-        <button onClick={() => setShowInput(!showInput)}>発信する</button>
-        {showInput && <CastComponent />}
-        <button onClick={handleSignOut}>ログアウト</button>
-      </div>
-      <div className="main-content">
-        <h1>Home</h1>
-        <div className="filter-buttons">
-          <button onClick={() => setFilter('favorite')}>お気に入りチーム</button>
-          <button onClick={() => setFilter('all')}>おすすめ</button>
-        </div>
-        <CastList casts={filteredCasts} onReply={handleReply} onLike={handleLike} />
+    <div className="home-container">
+      <button onClick={handleCastButtonClick}>キャストする</button>
+      <div className="cast-list-container">
+        {error && <div className="error-message">{error}</div>}
+        {casts.map((cast) => (
+          <div key={cast.id} className="cast-item">
+            <h3>{cast.content}</h3>
+            <p>Likes: {cast.likes}</p>
+            <div className="replies">
+              <h4>Replies:</h4>
+              {cast.replies.map((reply: Reply) => (  // 型を明示的に定義
+                <div key={reply.id} className="reply-item">
+                  <p>{reply.content}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );

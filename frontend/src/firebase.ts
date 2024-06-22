@@ -2,6 +2,7 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from 'firebase/auth';
 import { GoogleAuthProvider } from 'firebase/auth';
+import { signOut as firebaseSignOut } from 'firebase/auth';
 // TODO: Add SDKs for Firebase products that you want to use
 
 const firebaseConfig = {
@@ -17,5 +18,6 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
+const signOut = () => firebaseSignOut(auth);
 
-export { auth, provider };
+export { auth, provider, signOut };
