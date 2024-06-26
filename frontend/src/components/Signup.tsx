@@ -5,7 +5,7 @@ import { auth } from '../firebase'; // Firebaseの設定ファイルをインポ
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import '../App.css'; // CSSファイルのインポート
 
-const Signup: React.FC = () => {
+export const Signup: React.FC = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [user_name, setUsername] = useState<string>('');
@@ -29,7 +29,7 @@ const Signup: React.FC = () => {
       const user = userCredential.user;
 
       // ユーザー情報をサーバーにポスト
-      await axios.post('http://localhost:8080/users', {
+      await axios.post('http://localhost:8080/user', {
         user_name: user_name,
         email: email,
       });

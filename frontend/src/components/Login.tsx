@@ -1,42 +1,41 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { auth, provider } from '../firebase';
-import { signInWithPopup } from 'firebase/auth';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { UserCredential } from 'firebase/auth';
+import { auth } from '../firebase';
 import '../App.css'; // CSSファイルのインポート
+import axios  from 'axios'; 
 
-const Login: React.FC = () => {
+export const Login: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
-  const handleGoogleSignIn = () => {
-    signInWithPopup(auth, provider)
-      .then((result) => {
-        navigate('/home');
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  };
 
-  const handleEmailLogin = (e: React.FormEvent) => {
+  const handleEmailLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential: UserCredential) => {
-        navigate('/home');
-      })
-      .catch((error) => {
+    try{
+      const userCredential : UserCredential = await signInWithEmailAndPassword(auth, email, password)
+      const userEmail = userCredential.user.email;
+
+      if (!userEmail) {
+        throw new Error("メールが取得できませんでした。");
+      }
+      
+      const res = await axios.get('http://localhost:8080/user/select?user_name=${userName}&email=${userEmail}');
+      const userId = res.data.id;
+
+      console.log('User data:', res.data);
+        navigate('/home?id=${userId}');
+      
+    } catch(error)  {
         console.error(error);
-      });
+      }
   };
 
   return (
     <div className="login-container">
       <h2>ログイン</h2>
-      <button onClick={handleGoogleSignIn} className="google-button">Googleでログイン</button>
-      <div className="or-separator">ーまたはー</div>
       <form onSubmit={handleEmailLogin}>
         <input
           type="email"
