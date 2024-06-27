@@ -1,20 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import { fetchCasts, Cast, Reply } from './api';  // Reply 型もインポート
-import { useNavigate } from 'react-router-dom'; // React Router のフックをインポート
+ import axios from 'axios';
+import { useNavigate } from 'react-router-dom'; 
+import './Home.css'; // 必要に応じてスタイルシートのパスを修正してください
+
+
 
 const Home: React.FC = () => {
-  const [casts, setCasts] = useState<Cast[]>([]);
+  const [casts, setCasts] = useState<any[]>([]);
   const [error, setError] = useState<string | null>(null);
-  const navigate = useNavigate(); // useNavigate フックを使用
+  const navigate = useNavigate(); 
 
   useEffect(() => {
     const getCasts = async () => {
       try {
-        const castData = await fetchCasts();
-        setCasts(castData);
+        const response = await axios.get('http://localhost:8080/casts/show');
+        setCasts(response.data);
       } catch (error) {
         console.error('Failed to fetch casts:', error);
-        setError('Failed to fetch casts');
+        setError('Failed to fetch cast');
       }
     };
 
@@ -36,11 +39,15 @@ const Home: React.FC = () => {
             <p>Likes: {cast.likes}</p>
             <div className="replies">
               <h4>Replies:</h4>
-              {cast.replies.map((reply: Reply) => (  // 型を明示的に定義
-                <div key={reply.id} className="reply-item">
-                  <p>{reply.content}</p>
-                </div>
-              ))}
+              {cast.replies.length > 0 ? (
+                cast.replies.map((reply: any) => (
+                  <div key={reply.id} className="reply-item">
+                    <p>{reply.content}</p>
+                  </div>
+                ))
+              ) : (
+                <p>No replies yet.</p>
+              )}
             </div>
           </div>
         ))}
