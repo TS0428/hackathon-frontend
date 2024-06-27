@@ -8,7 +8,7 @@ import '../App.css'; // CSSファイルのインポート
 export const Signup: React.FC = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
-  const [user_name, setUsername] = useState<string>('');
+  const [userName, setUserName] = useState<string>('');
   const [emailError, setEmailError] = useState<string>('');
   const [passwordError, setPasswordError] = useState<string>('');
   const navigate = useNavigate();
@@ -30,9 +30,17 @@ export const Signup: React.FC = () => {
 
       // ユーザー情報をサーバーにポスト
       await axios.post('http://localhost:8080/user', {
-        user_name: user_name,
+        user_name: userName,
         email: email,
       });
+
+      // ユーザー情報を取得
+      const res = await axios.get(`http://localhost:8080/user/select?user_name=${userName}&email=${email}`);
+      const userId = res.data.id;
+
+      // ユーザーIDとユーザー名をlocalStorageに保存
+      localStorage.setItem('user_id', userId.toString());
+      localStorage.setItem('user_name', userName);
 
       // 登録完了後の処理
       navigate('/home');
@@ -68,8 +76,8 @@ export const Signup: React.FC = () => {
         {passwordError && <p className="error-text">{passwordError}</p>}
         <input
           type="text"
-          value={user_name}
-          onChange={(e) => setUsername(e.target.value)}
+          value={userName}
+          onChange={(e) => setUserName(e.target.value)}
           placeholder="Usernameを入力してください"
           className="input-field"
         />
