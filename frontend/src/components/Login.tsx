@@ -4,33 +4,38 @@ import { signInWithEmailAndPassword } from 'firebase/auth';
 import { UserCredential } from 'firebase/auth';
 import { auth } from '../firebase';
 import '../App.css'; // CSSファイルのインポート
-import axios  from 'axios'; 
+import axios from 'axios';
 
 export const Login: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
-
   const handleEmailLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    try{
-      const userCredential : UserCredential = await signInWithEmailAndPassword(auth, email, password)
+    try {
+      // Firebaseを使ってユーザーのサインインを行う
+      const userCredential: UserCredential = await signInWithEmailAndPassword(auth, email, password);
       const userEmail = userCredential.user.email;
 
       if (!userEmail) {
         throw new Error("メールが取得できませんでした。");
       }
-      
-      const res = await axios.get('http://localhost:8080/user/select?user_name=${userName}&email=${userEmail}');
+
+      // サーバーからユーザー情報を取得するためにGETリクエストを送る
+      const res = await axios.get(`http://localhost:8080/user/select?email=${userEmail}`); // クエリパラメータにメールアドレスを使用
       const userId = res.data.id;
+      const userName = res.data.user_name;
+
+      // ローカルストレージにユーザー情報を保存する
+      localStorage.setItem('user_id', userId);
+      localStorage.setItem('user_name', userName);
 
       console.log('User data:', res.data);
-        navigate('/home?id=${userId}');
-      
-    } catch(error)  {
-        console.error(error);
-      }
+      navigate('/home'); // ユーザーがホームページにリダイレクトされる
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
