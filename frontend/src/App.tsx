@@ -5,7 +5,6 @@ import Start from './components/Start';
 import Login from './components/Login';
 import Signup from './components/Signup';
 import Home from './components/Home/Home';
-import Tweet from './components/Home/Tweet';
 import NewTweet from './components/Home/NewTweet';
 import './App.css';
 
@@ -19,7 +18,6 @@ const App: React.FC = () => {
             <Link to="/login">Login</Link>
             <Link to="/signup">Signup</Link>
             <Link to="/home">Home</Link>
-            <Link to="/tweet">Tweet</Link>
           </nav>
         </header>
         <Routes>
@@ -28,7 +26,6 @@ const App: React.FC = () => {
           <Route path="/signup" element={<Signup />} />
           <Route path="/home" element={<Home />} />
           <Route path="/tweet" element={<NewTweet />} />
-          <Route path="/tweet/:id" element={<Tweet />} />
         </Routes>
       </div>
     </Router>

@@ -1,0 +1,36 @@
+/* TweetList.css */
+body {
+    background-color: #1da1f2; /* 背景色をTwitter風のブルーに設定 */
+    color: #ffffff; /* テキスト色を白に設定 */
+  }
+  
+  .tweet-list {
+    padding: 20px;
+  }
+  
+  .tweet {
+    background-color: #ffffff; /* ツイートの背景色を白に設定 */
+    color: #000000; /* ツイートのテキスト色を黒に設定 */
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+  }
+  
+  .tweet p {
+    margin: 5px 0;
+  }
+  
+  .tweet strong {
+    font-size: 1.2em;
+  }
+  
+  .tweet a {
+    color: #1da1f2;
+    text-decoration: none;
+  }
+  
+  .tweet a:hover {
+    text-decoration: underline;
+  }
+  
