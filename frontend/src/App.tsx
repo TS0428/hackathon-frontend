@@ -12,14 +12,6 @@ const App: React.FC = () => {
   return (
     <Router>
       <div>
-        <header>
-          <nav>
-            <Link to="/">Start</Link>
-            <Link to="/login">Login</Link>
-            <Link to="/signup">Signup</Link>
-            <Link to="/home">Home</Link>
-          </nav>
-        </header>
         <Routes>
           <Route path="/" element={<Start />} />
           <Route path="/login" element={<Login />} />
