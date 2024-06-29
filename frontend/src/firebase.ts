@@ -1,15 +1,23 @@
+// Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
+import { getAuth } from 'firebase/auth';
+import { GoogleAuthProvider } from 'firebase/auth';
+import { signOut as firebaseSignOut } from 'firebase/auth';
+// TODO: Add SDKs for Firebase products that you want to use
 
 const firebaseConfig = {
-  apikey: process.env.React_APP_API_KEY,
-  authDomain: process.env.REACT_APP_AUTH_DOMAIN,
-  projectId: process.env.REACT_APP_PROJECT_ID,
-  storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
-  messagingSenderId: process.env.REACT_APP_MESSAGEING_SENDER_ID,
-  appId: process.env.REACT_APP_APP_ID,
-}:
+  apiKey: "AIzaSyDeUu2Ws2L3vNqy3rT7-_2CLS9nNuu6Abo",
+  authDomain: "term5-tatsuto-sugioka.firebaseapp.com",
+  projectId: "term5-tatsuto-sugioka",
+  storageBucket: "term5-tatsuto-sugioka.appspot.com",
+  messagingSenderId: "877574459939",
+  appId: "1:877574459939:web:31fdeb23c2cb1891ec9796"
+};
 
+// Initialize Firebase
 const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const provider = new GoogleAuthProvider();
+const signOut = () => firebaseSignOut(auth);
 
-export const fireAuth = getAuth(app);
+export { auth, provider, signOut };
