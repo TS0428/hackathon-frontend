@@ -17,7 +17,7 @@ const NewTweet: React.FC = () => {
     }
 
     try {
-      await axios.post('http://localhost:8080/tweets', {
+      await axios.post('https://hackathon-backend-2hnc5jt4cq-uc.a.run.app/tweets', {
         user_id: parseInt(userId, 10), // 文字列を整数に変換
         user_name: userName,
         content: content,

@@ -12,7 +12,7 @@ const TweetList: React.FC = () => {
   useEffect(() => {
     const fetchTweets = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/tweets/show');
+        const response = await axios.get('https://hackathon-backend-2hnc5jt4cq-uc.a.run.app/tweets/show');
         setTweets(response.data);
         console.log('Fetched tweets: ', response.data);
       } catch (error) {
@@ -44,7 +44,7 @@ const TweetList: React.FC = () => {
     }
 
     try {
-      await axios.post('http://localhost:8080/replies', {
+      await axios.post('https://hackathon-backend-2hnc5jt4cq-uc.a.run.app/replies', {
         user_id: parseInt(userId, 10),
         tweet_id: tweetId,
         content: content,
@@ -54,7 +54,7 @@ const TweetList: React.FC = () => {
       alert('リプライが投稿されました');
 
       // Fetch updated tweets to show the new reply
-      const response = await axios.get('http://localhost:8080/tweets/show');
+      const response = await axios.get('https://hackathon-backend-2hnc5jt4cq-uc.a.run.app/tweets/show');
       setTweets(response.data);
     } catch (error) {
       console.error('リプライの投稿に失敗しました', error);
@@ -70,7 +70,7 @@ const TweetList: React.FC = () => {
     }
 
     try {
-      await axios.post('http://localhost:8080/likes', {
+      await axios.post('https://hackathon-backend-2hnc5jt4cq-uc.a.run.app/likes', {
         user_id: parseInt(userId, 10),
         tweet_id: tweetId,
       });

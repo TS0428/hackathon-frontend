@@ -30,13 +30,13 @@ export const Signup: React.FC = () => {
       console.log('Registered user:', user);
 
       // ユーザー情報をサーバーにポスト
-      await axios.post('http://localhost:8080/user', {
+      await axios.post('https://hackathon-backend-2hnc5jt4cq-uc.a.run.app/user', {
         user_name: userName,
         email: email,
       });
 
       // ユーザー情報を取得
-      const res = await axios.get(`http://localhost:8080/user/select?user_name=${userName}&email=${email}`);
+      const res = await axios.get(`https://hackathon-backend-2hnc5jt4cq-uc.a.run.app/user/select?user_name=${userName}&email=${email}`);
       const userId = res.data.id;
 
       // ユーザーIDとユーザー名をlocalStorageに保存

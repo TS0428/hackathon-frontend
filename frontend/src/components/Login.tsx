@@ -23,7 +23,7 @@ export const Login: React.FC = () => {
       }
 
       // サーバーからユーザー情報を取得するためにGETリクエストを送る
-      const res = await axios.get(`http://localhost:8080/user/select?email=${userEmail}`); // クエリパラメータにメールアドレスを使用
+      const res = await axios.get(`https://hackathon-backend-2hnc5jt4cq-uc.a.run.app/user/select?email=${userEmail}`); // クエリパラメータにメールアドレスを使用
       const userId = res.data.id;
       const userName = res.data.user_name;
 
