@@ -26,7 +26,6 @@ export const Signup: React.FC = () => {
     try {
       // Firebaseでユーザーを作成
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      const user = userCredential.user;
 
       // ユーザー情報をサーバーにポスト
       await axios.post('http://localhost:8080/user', {
