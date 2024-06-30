@@ -1,44 +1,63 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { signInWithEmailAndPassword } from 'firebase/auth';
-import { UserCredential } from 'firebase/auth';
-import { auth } from '../firebase';
-import '../App.css'; // CSSファイルのインポート
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { auth } from '../firebase'; // Firebaseの設定ファイルをインポート
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import '../App.css'; // CSSファイルのインポート
 
-export const Login: React.FC = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+export const Signup: React.FC = () => {
+  const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const [userName, setUserName] = useState<string>('');
+  const [emailError, setEmailError] = useState<string>('');
+  const [passwordError, setPasswordError] = useState<string>('');
   const navigate = useNavigate();
-
-  const handleEmailLogin = async (e: React.FormEvent) => {
+//
+  const handleEmailSignup = async (e: React.FormEvent) => {
     e.preventDefault();
+    setEmailError('');
+    setPasswordError('');
+
+    if (password.length < 6) {
+      setPasswordError('パスワードは6文字以上である必要があります');
+      return;
+    }
+
     try {
-      const userCredential: UserCredential = await signInWithEmailAndPassword(auth, email, password);
-      const userEmail = userCredential.user.email;
+      // Firebaseでユーザーを作成
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
 
-      if (!userEmail) {
-        throw new Error("メールが取得できませんでした。");
-      }
+      // ユーザー情報をサーバーにポスト
+      await axios.post('http://localhost:8080/user', {
+        user_name: userName,
+        email: email,
+      });
 
-      const res = await axios.get(`http://localhost:8080/user/select?email=${userEmail}`);
+      // ユーザー情報を取得
+      const res = await axios.get(`http://localhost:8080/user/select?user_name=${userName}&email=${email}`);
       const userId = res.data.id;
-      const userName = res.data.user_name;
 
-      localStorage.setItem('user_id', userId);
+      // ユーザーIDとユーザー名をlocalStorageに保存
+      localStorage.setItem('user_id', userId.toString());
       localStorage.setItem('user_name', userName);
 
-      console.log('User data:', res.data);
+      // 登録完了後の処理
       navigate('/home');
-    } catch (error) {
-      console.error(error);
+    } catch (error: any) {
+      console.error('Error during registration:', error);
+      if (error.code === 'auth/email-already-in-use') {
+        setEmailError('このメールアドレスは既に使用されています');
+      } else {
+        setEmailError('登録中にエラーが発生しました');
+      }
     }
   };
 
   return (
-    <div className="login-container">
-      <h2>ログイン</h2>
-      <form onSubmit={handleEmailLogin}>
+    <div className="signup-container">
+      <h1>新規登録</h1>
+      <form onSubmit={handleEmailSignup}>
         <input
           type="email"
           value={email}
@@ -46,6 +65,7 @@ export const Login: React.FC = () => {
           placeholder="Emailを入力してください"
           className="input-field"
         />
+        {emailError && <p className="error-text">{emailError}</p>}
         <input
           type="password"
           value={password}
@@ -53,10 +73,18 @@ export const Login: React.FC = () => {
           placeholder="Passwordを入力してください"
           className="input-field"
         />
-        <button type="submit" className="submit-button">ログイン</button>
+        {passwordError && <p className="error-text">{passwordError}</p>}
+        <input
+          type="text"
+          value={userName}
+          onChange={(e) => setUserName(e.target.value)}
+          placeholder="Usernameを入力してください"
+          className="input-field"
+        />
+        <button type="submit" className="submit-button">新規登録</button>
       </form>
     </div>
   );
 };
 
-export default Login;
+export default Signup;
