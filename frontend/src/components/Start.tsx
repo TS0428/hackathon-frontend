@@ -6,7 +6,7 @@ const Start: React.FC = () => {
 
   return (
     <div className="start-screen">
-      <h1>Welcome to Cast!!</h1>
+      <h1>Welcome to Tweet!!</h1>
       <p>言葉のキャッチボールをしよう</p>
       <button
         className="styled-button"
